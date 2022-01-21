@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# 証明書タイプ
+
 # 鍵ファイル名
-key_name=android
+key_name=example
 
 # 鍵長 (ビット数)
 key_length=2048
 
-# 発効日時
+# 発効日時（年月日時分Z）
+# UTC形式
 start_date=20220101090000Z
 
 # 失効日時

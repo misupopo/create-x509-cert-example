@@ -1,19 +1,39 @@
 #!/bin/bash
 
 tempdir=$1
+cert_type="root"
 
 conf=$(cat <<EOF
+
+# openssl req
 [req]
-distinguished_name = req_distinguished_name
+distinguished_name = req_for_${cert_type}
 prompt = no
 
-
-[req_distinguished_name]
+# ルート証明書
+[req_for_root]
 C = JP
 ST = Tokyo
-OU = Test app development
-CN = Latona SAP Root CA
+OU = System Development
+# ルート認証局
+CN = Root CA
 
+# 中間証明書
+[req_for_intermediate]
+C = JP
+ST = Tokyo
+OU = System Development
+# Certificate Authority
+# 認証局のこと
+# 中間認証局
+CN = Intermediate CA
+
+# 末端証明書
+[req_for_leaf]
+# 末端証明書のCNは基本的にはドメイン
+CN = example.com
+
+# openssl ca
 [ca]
 default_ca = ca_default
 
@@ -36,11 +56,20 @@ organizationalUnitName = optional
 commonName = optional
 emailAddress = optional
 
+# openssl -extensions v3_ca
 [v3_ca]
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always
+# critical: この証明書を受け取ったソフトウェアで、この属性を解釈できない場合、無視してはならない (エラーで落とす)
+keyUsage = critical, digitalSignature, keyCertSign, cRLSign
+extendedKeyUsage = clientAuth, serverAuth
 
-basicConstraints = CA:TRUE, pathlen:0
+# ルート CA:TRUE, pathlen:1
+# 中間 CA:TRUE, pathlen:0
+# 末端 CA:FALSE
+basicConstraints = critical, CA:TRUE, pathlen:0
+# 末端証明書のみ: ドメイン名をここにもう一度記載
+# subjectAltName = DNS:example.com
 EOF
 )
 
