@@ -17,6 +17,17 @@ generate-intermediate:
 	bash create-cert.sh intermediate root
 
 # 末端証明書
-.PHONY: generate-leaf
-generate-leaf:
-	bash create-cert.sh leaf root
+.PHONY: generate-leaf-for-server
+generate-leaf-for-server:
+	bash create-cert.sh leafForServer root
+
+# firefoxに持たせるための証明書
+.PHONY: generate-leaf-for-client
+generate-leaf-for-client:
+	bash create-cert.sh leafForClient root
+
+.PHONY: generate-leaf-all
+generate-leaf-all:
+	make generate-leaf-for-server
+	make generate-leaf-for-client
+

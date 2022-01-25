@@ -11,8 +11,10 @@ else
 certTypeConstraints="critical, CA:FALSE"
 fi
 
-if [ "$cert_type" == "leaf" ]; then
-handleSubjectAltName="subjectAltName = DNS:example.com"
+if [ "$cert_type" == "leafForServer" ]; then
+handleSubjectAltName="subjectAltName = DNS:localhost"
+elif [ "$cert_type" == "leafForClient" ]; then
+handleSubjectAltName="subjectAltName = DNS:authorized-firefox.example.com"
 else
 handleSubjectAltName=""
 fi
@@ -44,9 +46,13 @@ OU = System Development
 CN = Intermediate CA
 
 # 末端証明書
-[req_for_leaf]
+[req_for_leafForServer]
 # 末端証明書のCNは基本的にはドメイン
-CN = example.com
+CN = localhost
+
+[req_for_leafForClient]
+# 末端証明書のCNは基本的にはドメイン
+CN = authorized-firefox.example.com
 
 # openssl ca
 [ca]

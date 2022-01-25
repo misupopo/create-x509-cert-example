@@ -59,5 +59,14 @@ else
   	-notext -out "$export_directory/$key_name.x509.pem"
 fi
 
+if [ "$cert_type" == "leafForClient" ]; then
+  # PKCS#12 形式に変換
+  # firefoxに持たせる用の証明書と秘密鍵を結合したもの
+  openssl pkcs12 -export \
+  	-passout "pass:password" \
+  	-in "$export_directory/leafForClient.x509.pem" -inkey "$export_directory/leafForClient.key" \
+  	-out "$export_directory/leafForClient.p12"
+fi
+
 # テンポラリディレクトリの削除
 rm -rf "$tempdir"

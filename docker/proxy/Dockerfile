@@ -1,4 +1,3 @@
-FROM nginx:alpine
+FROM nginx:latest
 
-COPY ./conf/proxy/nginx.conf /etc/nginx/
-
+ADD ./conf/proxy/nginx.conf /etc/nginx/
