@@ -1,8 +1,23 @@
 #!/bin/bash
 
 tempdir=$1
-cert_type="root"
+cert_type=$2
 
+if [ "$cert_type" == "root" ]; then
+certTypeConstraints="critical, CA:TRUE, pathlen:1"
+elif [ "$cert_type" == "intermediate" ]; then
+certTypeConstraints="critical, CA:TRUE, pathlen:0"
+else
+certTypeConstraints="critical, CA:FALSE"
+fi
+
+if [ "$cert_type" == "leaf" ]; then
+handleSubjectAltName="subjectAltName = DNS:example.com"
+else
+handleSubjectAltName=""
+fi
+
+# confの中身
 conf=$(cat <<EOF
 
 # openssl req
@@ -67,9 +82,11 @@ extendedKeyUsage = clientAuth, serverAuth
 # ルート CA:TRUE, pathlen:1
 # 中間 CA:TRUE, pathlen:0
 # 末端 CA:FALSE
-basicConstraints = critical, CA:TRUE, pathlen:0
+basicConstraints=${certTypeConstraints}
+
 # 末端証明書のみ: ドメイン名をここにもう一度記載
-# subjectAltName = DNS:example.com
+${handleSubjectAltName}
+
 EOF
 )
 
