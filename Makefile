@@ -14,9 +14,9 @@ generate-root:
 # 中間証明書
 .PHONY: generate-intermediate
 generate-intermediate:
-	bash create-cert.sh intermediate
+	bash create-cert.sh intermediate root
 
 # 末端証明書
 .PHONY: generate-leaf
 generate-leaf:
-	bash create-cert.sh leaf
+	bash create-cert.sh leaf root

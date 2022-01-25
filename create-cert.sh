@@ -3,6 +3,9 @@
 # 証明書タイプ
 cert_type=$1
 
+# 親の証明書タイプ
+parent_cert_type=$2
+
 # 鍵ファイル名
 key_name=$cert_type
 
@@ -34,14 +37,27 @@ openssl genpkey -algorithm RSA \
 touch "$tempdir/index.txt"
 openssl rand -hex 16 > "$tempdir/serial.txt"
 
-# オレオレ証明書の作成
-openssl req -new -key "$export_directory/$key_name.key" -config <(echo "$config") \
-| openssl ca -batch -config <(echo "$config") \
-	-selfsign -keyfile "$export_directory/$key_name.key" \
-	-startdate "$start_date" -enddate "$end_date" \
-	-extensions v3_ca \
-	-in /dev/stdin \
-	-notext -out "$export_directory/$key_name.x509.pem"
+if [ "$parent_cert_type" ]; then
+  # 中間以下の生成例
+  # keyfileは親の物 例：intermediate=root、leaf=intermediate
+  # certも親の物 例：intermediate=root、leaf=intermediate
+  openssl req -new -key "$export_directory/$key_name.key" -config <(echo "$config") \
+  | openssl ca -batch -config <(echo "$config") \
+    -keyfile "$export_directory/$parent_cert_type.key" -cert "$export_directory/$parent_cert_type.x509.pem" \
+    -startdate "$start_date" -enddate "$end_date" \
+    -extensions v3_ca \
+    -in /dev/stdin \
+    -notext -out "$export_directory/$key_name.x509.pem"
+else
+  # selfsignはルート証明書のみである場合
+  openssl req -new -key "$export_directory/$key_name.key" -config <(echo "$config") \
+  | openssl ca -batch -config <(echo "$config") \
+  	-selfsign -keyfile "$export_directory/$key_name.key" \
+  	-startdate "$start_date" -enddate "$end_date" \
+  	-extensions v3_ca \
+  	-in /dev/stdin \
+  	-notext -out "$export_directory/$key_name.x509.pem"
+fi
 
 # テンポラリディレクトリの削除
 rm -rf "$tempdir"
