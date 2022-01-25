@@ -1,0 +1,30 @@
+version: '3.4'
+services:
+  proxy:
+    container_name: proxy
+    build:
+      context: ./docker/proxy
+    ports:
+      - "443:443"
+    networks:
+      app_net:
+        ipv4_address: 173.17.2.1
+  app:
+    container_name: app
+    build:
+      context: ./docker/app
+    ports:
+      - "443:443"
+    volumes:
+      - ./exportKey:/exportKey
+    networks:
+      app_net:
+        ipv4_address: 173.17.2.2
+
+networks:
+  app_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.17.0.0/16
+

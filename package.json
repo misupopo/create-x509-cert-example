@@ -1,0 +1,19 @@
+{
+  "name": "create-x509-cert-example",
+  "version": "1.0.0",
+  "description": "opensslでX.509のSSLサーバー証明書を生成するサンプルアプリケーションです。 ルート証明書と中間証明書と末端証明書の生成をできるようにする予定です。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misupopo/create-x509-cert-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/misupopo/create-x509-cert-example/issues"
+  },
+  "homepage": "https://github.com/misupopo/create-x509-cert-example#readme"
+}
