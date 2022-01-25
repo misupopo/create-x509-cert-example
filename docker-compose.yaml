@@ -17,6 +17,7 @@ services:
       - "443:443"
     volumes:
       - ./exportKey:/exportKey
+      - ./app:/app
     networks:
       app_net:
         ipv4_address: 173.17.2.2

@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/misupopo/create-x509-cert-example/issues"
   },
-  "homepage": "https://github.com/misupopo/create-x509-cert-example#readme"
+  "homepage": "https://github.com/misupopo/create-x509-cert-example#readme",
+  "devDependencies": {
+    "express-generator": "^4.16.1"
+  }
 }
