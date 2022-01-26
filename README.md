@@ -16,3 +16,9 @@ opensslでX.509のSSLサーバー証明書を生成するサンプルアプリ�
 → ブラウザでリロード（https://localhost） → このサイトはあなたの証明書を求めています → OKを押す
 → レスポンスが返ってくる
 
+## ドキュメント
+### X.509 証明書
+![](document/generate.jpeg)
+
+### 暗号化通信
+![](document/ssl.jpeg)
